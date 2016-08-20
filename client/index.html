@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bucharest JS | Dockerizing my webapp</title>
+    <link href="src/css/bjs.css" rel="stylesheet" title="Default Style">
+  </head>
+  <body>
+    <script>
+      var x = new WebSocket("ws://192.168.0.6:8080");
+
+      x.onmessage = function(event){
+        document.getElementById('connected').innerHTML = "Connected: " + event.data;
+      }
+
+      window.onunload = function(){
+        x.close();
+      }
+
+      x.onerror = function(){
+        x.close();
+      }
+    </script>
+
+      <p id="connected">
+
+      </p>
+
+  </body>
+</html>
