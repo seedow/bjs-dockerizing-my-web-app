@@ -7,24 +7,32 @@
   </head>
   <body>
     <script>
-      var x = new WebSocket("ws://192.168.0.6:8080");
 
-      x.onmessage = function(event){
-        document.getElementById('connected').innerHTML = "Connected: " + event.data;
+  var ws;
+
+  function initWs(){
+    ws = new WebSocket("ws://localhost:8080");
+    ws.onmessage = function(event){
+      document.getElementById('hits').innerHTML = "HITS: " + event.data;
+    }
+
+    ws.onclose = function(){
+        //try to reconnect in 5 seconds
+        setTimeout(function(){initWs();console.log('reconnecting')}, 200);
+    };
+
+  }
+
+  initWs();
+
+      function hit(){
+        ws.send("HIT");
       }
 
-      window.onunload = function(){
-        x.close();
-      }
-
-      x.onerror = function(){
-        x.close();
-      }
     </script>
+      <button onclick="hit()">HIT!</button>
+      <div id="hits">
 
-      <p id="connected">
-
-      </p>
-
+      </div>
   </body>
 </html>

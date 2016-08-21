@@ -14,7 +14,7 @@ var isConnected = false;
 function initDB() {
   client.exists('usersConnected', function(err, reply) {
     if (reply !== 1) {
-      client.set("usersConnected", 0);
+      client.set("hits", 0);
       console.log('Db initialized');
     } else {
       console.log('Db already exists');
@@ -38,8 +38,6 @@ client.on('error', function() {
 
 client.on('end', function() {
   console.log("Could not contact the redis server");
-  client.set("usersConnected", wss.clients.length)
-  isConnected = false;
 })
 
 client.monitor(function() {});
@@ -47,28 +45,15 @@ client.on('monitor', function() {
   console.log(arguments[1])
 })
 
-function setConnectedUsers(userConnected) {
-  if (userConnected) {
-    client.incr("usersConnected");
-  } else {
-    client.decr("usersConnected");
-  }
-  if (isConnected) {
-    client.get("usersConnected", sendUpdate);
-  } else {
-    sendUpdate(null, wss.clients.length)
-  }
+function hit(userConnected) {
+  client.decr("hits", sendUpdate);
+
 }
 
 wss.on('connection', function connection(ws) {
-  console.log('%s connected ', ws.upgradeReq.connection.remoteAddress);
-  setConnectedUsers(true);
-
-  ws.on('close', function incoming() {
-    console.log('%s isconnected ', ws.upgradeReq.connection.remoteAddress);
-    setConnectedUsers(false);
-  });
-
+  ws.on('message', function() {
+    hit();
+  })
 });
 
 
