@@ -8,6 +8,9 @@ var wss = new WebSocketServer({
 
 var client = redis.createClient(config.redisPort, config.redisUrl);
 
+var isConnected = false;
+
+
 function initDB() {
   client.exists('usersConnected', function(err, reply) {
     if (reply !== 1) {
@@ -20,23 +23,41 @@ function initDB() {
 }
 
 client.on('connect', function() {
-  console.log('Redis connected');
+  console.log('Connection with redis server established');
+  isConnected = true;
   initDB();
 })
 
+client.on('reconnecting', function() {
+  console.log('Reconnecting')
+})
+
 client.on('error', function() {
-  console.log(
-    'Something went wrong when connecting to redis, reconnecting ...');
+
+})
+
+client.on('end', function() {
+  console.log("Could not contact the redis server");
+  client.set("usersConnected", wss.clients.length)
+  isConnected = false;
+})
+
+client.monitor(function() {});
+client.on('monitor', function() {
+  console.log(arguments[1])
 })
 
 function setConnectedUsers(userConnected) {
-
   if (userConnected) {
     client.incr("usersConnected");
   } else {
     client.decr("usersConnected");
   }
-  client.get("usersConnected", sendUpdate)
+  if (isConnected) {
+    client.get("usersConnected", sendUpdate);
+  } else {
+    sendUpdate(null, wss.clients.length)
+  }
 }
 
 wss.on('connection', function connection(ws) {
@@ -44,11 +65,12 @@ wss.on('connection', function connection(ws) {
   setConnectedUsers(true);
 
   ws.on('close', function incoming() {
-    console.log('%s isconnected', ws.upgradeReq.connection.remoteAddress);
+    console.log('%s isconnected ', ws.upgradeReq.connection.remoteAddress);
     setConnectedUsers(false);
   });
 
 });
+
 
 var sendUpdate = function(err, connections) {
   wss.clients.forEach(function(client) {

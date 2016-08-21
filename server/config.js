@@ -1,6 +1,6 @@
 var CONFIG = {
   wsPort: 8080,
-  redisUrl: "localhost",
+  redisUrl: "redis",
   redisPort: 6379
 }
 

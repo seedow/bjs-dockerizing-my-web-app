@@ -4,13 +4,18 @@ services:
     image: redis
     ports:
       - 6379:6379
-  # lb:
-  #   image: 'dockercloud/haproxy:latest'
-  #   links:
-  #     - server
-  #   ports:
-  #     - '80:80'
-  #   volumes:
-  #     - ~/.ssl:/certs/
-  #   environment:
-  #     - CA_CERT_FILE:/certs/cert.pem
+    volumes:
+      - ./db/storage:/data
+    command: redis-server --appendonly yes
+  bjs-server:
+    build: ./server
+    depends_on:
+      - redis
+    ports:
+      - 8080:8080
+  bjs-client:
+    build: ./client/
+    depends_on:
+      - bjs-server
+    ports:
+      - 80:80
