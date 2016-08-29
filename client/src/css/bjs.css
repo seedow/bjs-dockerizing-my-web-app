@@ -1,16 +1,126 @@
-html {
-  background-color: green;
-  background-image: url("../img/bjs.jpg");
-  background-position: top;
-  background-size: 50%;
-  background-repeat: no-repeat;
+
+#container{
+  position:absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.depth{
+  position:absolute;
+  margin-top: 10px;
+  margin-right: 10px;
+  z-index: 5;
+}
+.hook{
+  position: absolute;
+  width:100%;
+  height: 100%;
+  margin-left: -20px;
+  margin-top:-50px;
+  transform:translate(0%,-100%);
+  background-image: url("../img/hook.svg");
+  background-clip: content-box;
+  background-position: bottom;
+  background-repeat: repeat-x;
+  background-size: contain;
+  z-index: 1;
 }
 
-#connected {
-  font-size: 32px;
-  font-weight: bold;
-  font-family: sans-serif;
-  position: absolute;
-  bottom: 20%;
-  left:42%;
+.hook.pull-up{
+  animation-name:pull-up;
+  animation-duration: 5s;
+  animation-direction: alternate;
+  animation-iteration-count: 2;
 }
+.hook.pause{
+  animation-play-state: paused;
+}
+
+.oceanFloor{
+  position: absolute;
+  width:100%;
+  height: 100%;
+  background-image: url("../img/oceanFloor.svg");
+  background-clip: content-box;
+  background-position: bottom;
+  background-repeat: repeat-x;
+  background-size: contain;
+  z-index: 2;
+}
+
+.sea{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image:url("../img/sea.svg");
+  background-clip: content-box;
+  background-position: top;
+  background-size:cover;
+}
+
+.bjs-bottle{
+  /*margin-bottom: 200px;*/
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image:url("../img/bjs-bottle.svg");
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size:contain;
+  z-index: 2;
+}
+
+.bjs-bottle.pull-up{
+  animation-name:pull-up;
+  animation-delay: 5s;
+  animation-duration: 5s;
+  animation-direction: reverse;
+}
+
+.bjs-bottle.pause{
+  animation-play-state: paused;
+}
+
+
+.fish{
+  margin-bottom: 20px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image:url("../img/fish.svg");
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size:contain;
+  animation: swim 3s infinite;
+  animation-direction:alternate-reverse;
+}
+
+@keyframes swim {
+  from {
+    margin-left: 100%;
+    margin-top: 20%;
+  }
+  to {
+    margin-top:60%
+    margin-left: -100%;
+  }
+}
+
+@keyframes pull-up{
+  0%{
+    transform:translate(0%,-100%);
+  }
+  100%{
+    transform:translate(0%,0%);
+  }
+}
+
+
+/*@keyframes swim {
+  0% {transform: translate(200%, 75%) rotate(0deg)}
+  20%{transform: translate(100%, -55%) rotate(40deg)}
+  40%{transform: translate(0%, -125%) rotate(-20deg)}
+  60%{transform: translate(-100%, -55%) rotate(-30deg)}
+  80% {transform: translate(-200%, 75%) rotate(-50deg)}
+  100% {transform: translate(-300%, 200%) rotate(-50deg)}
+}*/

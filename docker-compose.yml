@@ -8,14 +8,19 @@ services:
       - ./db/storage:/data
     command: redis-server --appendonly yes
   bjs-server:
-    build: ./server
+    image: seedow/bjs-server:incr1
     depends_on:
       - redis
     ports:
       - 8080:8080
   bjs-client:
-    build: ./client/
+    image: seedow/bjs-client:v1
     depends_on:
       - bjs-server
     ports:
       - 80:80
+    environment:
+      # SERVER: 52.28.182.213
+      SERVER: $BJS_SERVER_HOST
+    restart: always
+    command: sh -c "sed -i -e 's/$$SERVER/'"$$SERVER"'/g' index.html; nginx -g 'daemon off;'"

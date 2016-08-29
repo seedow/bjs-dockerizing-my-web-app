@@ -6,33 +6,89 @@
     <link href="src/css/bjs.css" rel="stylesheet" type="text/css"/>
   </head>
   <body>
-    <script>
 
-  var ws;
+      <!-- <button onclick="hit()">HIT!</button> -->
 
-  function initWs(){
-    ws = new WebSocket("ws://localhost:8080");
-    ws.onmessage = function(event){
-      document.getElementById('hits').innerHTML = "HITS: " + event.data;
-    }
 
-    ws.onclose = function(){
-        //try to reconnect in 5 seconds
-        setTimeout(function(){initWs();console.log('reconnecting')}, 200);
-    };
+      <div id='container'>
+        <div class='hook'></div>
+        <div class="depth"></div>
+        <div class='sea'></div>
+        <div class='fish'></div>
+        <div class='oceanFloor'></div>
+        <div class='bjs-bottle'></div>
+      </div>
 
+
+
+
+  </body>
+  <script>
+
+var ws;
+
+function initWs(){
+  ws = new WebSocket("ws://$SERVER:8080");
+
+  ws.onmessage = function(event){
+    updateDepth(event.data)
   }
 
-  initWs();
+  ws.onclose = function(){
+      //try to reconnect in 5 seconds
+      setTimeout(function(){initWs();console.log('reconnecting')}, 200);
+  };
 
-      function hit(){
-        ws.send("HIT");
+}
+
+// initWs();
+    function updateDepth(newDepth){
+      // console.log("new depth: ",newDepth);
+      document.getElementsByClassName('depth')[0].innerHTML = newDepth;
+
+    }
+    function hit(){
+      ws.send("HIT");
+    }
+
+    var meters = 0;
+
+
+    var hook = document.querySelector('.hook');
+    var bottle = document.querySelector('.bjs-bottle');
+    hook.addEventListener('animationiteration', function(){
+      hook.classList.add('pause');
+      bottle.classList.add('pause');
+    })
+    var down = true;
+
+    setInterval(function(){
+
+      if(meters == 0)
+       {
+         down=true
+       }
+         else if(meters == 100)
+       {
+        down=false;
+       }
+
+      if(down){
+          updateDepth(meters++)
+      }else{
+        updateDepth(meters--)
+      }
+      if(meters == 100){
+        hook.classList.add('pull-up');
+        bottle.classList.add('pull-up');
+      }
+      if(meters == 0){
+        hook.classList.remove('pause');
+        bottle.classList.remove('pause');
       }
 
-    </script>
-      <button onclick="hit()">HIT!</button>
-      <div id="hits">
+    }, 200)
 
-      </div>
-  </body>
+
+  </script>
 </html>

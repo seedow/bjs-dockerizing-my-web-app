@@ -6,15 +6,13 @@ var wss = new WebSocketServer({
   port: config.wsPort
 })
 
-var client = redis.createClient(config.redisPort, config.redisUrl);
-
-var isConnected = false;
+var redis = redis.createClient(config.redisPort, config.redisUrl);
 
 
 function initDB() {
-  client.exists('usersConnected', function(err, reply) {
+  redis.exists('hits', function(err, reply) {
     if (reply !== 1) {
-      client.set("hits", 0);
+      redis.set("hits", 0);
       console.log('Db initialized');
     } else {
       console.log('Db already exists');
@@ -22,31 +20,31 @@ function initDB() {
   })
 }
 
-client.on('connect', function() {
+redis.on('connect', function() {
   console.log('Connection with redis server established');
   isConnected = true;
   initDB();
 })
 
-client.on('reconnecting', function() {
+redis.on('reconnecting', function() {
   console.log('Reconnecting')
 })
 
-client.on('error', function() {
+redis.on('error', function() {
 
 })
 
-client.on('end', function() {
+redis.on('end', function() {
   console.log("Could not contact the redis server");
 })
 
-client.monitor(function() {});
-client.on('monitor', function() {
+redis.monitor(function() {});
+redis.on('monitor', function() {
   console.log(arguments[1])
 })
 
 function hit(userConnected) {
-  client.decr("hits", sendUpdate);
+  redis.incr("hits", sendUpdate);
 
 }
 
