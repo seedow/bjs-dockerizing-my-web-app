@@ -8,13 +8,13 @@ services:
       - ./db/storage:/data
     command: redis-server --appendonly yes
   bjs-server:
-    image: seedow/bjs-server:incr1
+    builds: ./server
     depends_on:
       - redis
     ports:
       - 8080:8080
   bjs-client:
-    image: seedow/bjs-client:v1
+    builds: ./client
     depends_on:
       - bjs-server
     ports:

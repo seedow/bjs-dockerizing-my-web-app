@@ -7,9 +7,6 @@
   </head>
   <body>
 
-      <!-- <button onclick="hit()">HIT!</button> -->
-
-
       <div id='container'>
         <div class='hook'></div>
         <div class="depth"></div>
@@ -31,7 +28,7 @@
 var ws;
 
 function initWs(){
-  ws = new WebSocket("ws://$SERVER:8080");
+  ws = new WebSocket("ws://localhost:8080");
 
   ws.onmessage = function(event){
     updateDepth(event.data)
@@ -44,21 +41,24 @@ function initWs(){
 
 }
 
-// initWs();
+initWs();
     function updateDepth(newDepth){
-      // console.log("new depth: ",newDepth);
-      document.getElementsByClassName('depth')[0].innerHTML = newDepth;
-
-    }
-    function hit(){
-      ws.send("HIT");
+      if(newDepth == 199){
+        hook.classList.add('pull-up');
+        bottle.classList.add('pull-up');
+      }
+      if(newDepth == 1){
+        hook.classList.remove('pause');
+        bottle.classList.remove('pause');
+      }
+      document.getElementsByClassName('depth')[0].innerHTML = newDepth + "METERS";
     }
 
     var meters = 0;
 
     var audio = new Audio('src/sound/water.mp3');
     audio.play();
-    
+
     var hook = document.querySelector('.hook');
     var bottle = document.querySelector('.bjs-bottle');
 
@@ -71,34 +71,34 @@ function initWs(){
       this.style.opacity = 0;
     })
 
-    var down = true;
+    // var down = true;
 
-    setInterval(function(){
-
-      if(meters == 0)
-       {
-         down=true
-       }
-         else if(meters == 100)
-       {
-        down=false;
-       }
-
-      if(down){
-          updateDepth(meters++)
-      }else{
-        updateDepth(meters--)
-      }
-      if(meters == 100){
-        hook.classList.add('pull-up');
-        bottle.classList.add('pull-up');
-      }
-      if(meters == 0){
-        hook.classList.remove('pause');
-        bottle.classList.remove('pause');
-      }
-
-    }, 100)
+    // setInterval(function(){
+    //
+    //   if(meters == 0)
+    //    {
+    //      down=true
+    //    }
+    //      else if(meters == 100)
+    //    {
+    //     down=false;
+    //    }
+    //
+    //   if(down){
+    //       updateDepth(meters++)
+    //   }else{
+    //     updateDepth(meters--)
+    //   }
+    //   if(meters == 100){
+    //     hook.classList.add('pull-up');
+    //     bottle.classList.add('pull-up');
+    //   }
+    //   if(meters == 0){
+    //     hook.classList.remove('pause');
+    //     bottle.classList.remove('pause');
+    //   }
+    //
+    // }, 100)
 
 
   </script>

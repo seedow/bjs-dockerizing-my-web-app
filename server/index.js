@@ -10,9 +10,9 @@ var redis = redis.createClient(config.redisPort, config.redisUrl);
 
 
 function initDB() {
-  redis.exists('hits', function(err, reply) {
+  redis.exists('depth', function(err, reply) {
     if (reply !== 1) {
-      redis.set("hits", 0);
+      redis.set("depth", 0, sendUpdate);
       console.log('Db initialized');
     } else {
       console.log('Db already exists');
@@ -30,9 +30,7 @@ redis.on('reconnecting', function() {
   console.log('Reconnecting')
 })
 
-redis.on('error', function() {
-
-})
+redis.on('error', function() {})
 
 redis.on('end', function() {
   console.log("Could not contact the redis server");
@@ -41,22 +39,29 @@ redis.on('end', function() {
 redis.monitor(function() {});
 redis.on('monitor', function() {
   console.log(arguments[1])
-})
+});
 
-function hit(userConnected) {
-  redis.incr("hits", sendUpdate);
-
+function updateDepth() {
+  redis.get("depth", function(err, meters) {
+    if (meters != config.maxDepth) redis.incr("depth", sendUpdate);
+    // if (meters != config.minDepth) redis.decr("depth", sendUpdate);
+  })
 }
 
 wss.on('connection', function connection(ws) {
-  ws.on('message', function() {
-    hit();
+  redis.get('depth', function(err, meters) {
+    sendUpdate(null, meters)
   })
+
+  ws.on('message', function() {
+    updateDepth();
+  })
+
 });
 
 
-var sendUpdate = function(err, connections) {
+var sendUpdate = function(err, depth) {
   wss.clients.forEach(function(client) {
-    client.send(connections.toString())
+    client.send(depth.toString())
   })
 }
