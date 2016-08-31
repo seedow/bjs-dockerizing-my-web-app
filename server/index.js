@@ -55,14 +55,14 @@ function updateDepth() {
 wss.on('connection', function connection(ws) {
   //if we get any message from any client then update the depth
   ws.on('message', function(message) {
-    if (message == 'depthPing') {
-      redis.get("depth", function(err, meters) {
-        ws.send(meters.toString())
-      })
-    } else {
-      winston.log('info', 'updateDept');
-      updateDepth();
-    }
+    // if (message == 'depthPing') {
+    //   redis.get("depth", function(err, meters) {
+    //     ws.send(meters.toString())
+    //   })
+    // } else {
+    winston.log('info', 'updateDept');
+    updateDepth();
+    // }
   })
 });
 
