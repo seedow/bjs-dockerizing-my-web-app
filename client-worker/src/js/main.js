@@ -1,11 +1,17 @@
 var modifyDepthButton = document.querySelector('.depth-modifier');
 var ws = "";
+var reelSound = new Audio('src/sound/reel.mp3')
+
 var updateDepth = function() {
   ws.send('x')
+  reelSound.currentTime = 0;
+  reelSound.play();
 }
 
+// var $SERVER = "localhost";
+
 function initWs() {
-  ws = new WebSocket("ws://192.168.2.15:8080");
+  ws = new WebSocket("ws://" + $SERVER + ":8080");
 
   ws.onmessage = function(event) {
     if (event.data == 'disable') {

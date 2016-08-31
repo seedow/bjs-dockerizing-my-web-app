@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Bucharest JS | Dockerizing my webapp</title>
     <link href="src/css/bjs.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
   </head>
   <body>
 
@@ -14,92 +15,12 @@
         <div class='fish'></div>
         <div class='fish fish2'></div>
         <div class='fish fish3'></div>
+        <div class='compose'></div>
         <div class='alga'></div>
         <div class='oceanFloor'></div>
         <div class='bjs-bottle'></div>
       </div>
 
-
-
-
   </body>
-  <script>
-
-var ws;
-
-function initWs(){
-  ws = new WebSocket("ws://localhost:8080");
-
-  ws.onmessage = function(event){
-    updateDepth(event.data)
-  }
-
-  ws.onclose = function(){
-      //try to reconnect in 5 seconds
-      setTimeout(function(){initWs();console.log('reconnecting')}, 200);
-  };
-
-}
-
-initWs();
-    function updateDepth(newDepth){
-      if(newDepth == 199){
-        hook.classList.add('pull-up');
-        bottle.classList.add('pull-up');
-      }
-      if(newDepth == 1){
-        hook.classList.remove('pause');
-        bottle.classList.remove('pause');
-      }
-      document.getElementsByClassName('depth')[0].innerHTML = newDepth + "METERS";
-    }
-
-    var meters = 0;
-
-    var audio = new Audio('src/sound/water.mp3');
-    audio.play();
-
-    var hook = document.querySelector('.hook');
-    var bottle = document.querySelector('.bjs-bottle');
-
-    hook.addEventListener('animationiteration', function(){
-      hook.classList.add('pause');
-      bottle.classList.add('pause');
-    });
-
-    bottle.addEventListener('animationend', function(){
-      this.style.opacity = 0;
-    })
-
-    // var down = true;
-
-    // setInterval(function(){
-    //
-    //   if(meters == 0)
-    //    {
-    //      down=true
-    //    }
-    //      else if(meters == 100)
-    //    {
-    //     down=false;
-    //    }
-    //
-    //   if(down){
-    //       updateDepth(meters++)
-    //   }else{
-    //     updateDepth(meters--)
-    //   }
-    //   if(meters == 100){
-    //     hook.classList.add('pull-up');
-    //     bottle.classList.add('pull-up');
-    //   }
-    //   if(meters == 0){
-    //     hook.classList.remove('pause');
-    //     bottle.classList.remove('pause');
-    //   }
-    //
-    // }, 100)
-
-
-  </script>
+  <script src="src/js/main.js"></script>
 </html>

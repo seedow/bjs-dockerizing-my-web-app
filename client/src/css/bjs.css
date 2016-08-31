@@ -7,23 +7,24 @@
 }
 .depth{
   position:absolute;
+  font-family: 'Luckiest Guy', cursive;
   font-size: 3em;
   margin-top: 10px;
-  margin-right: 10px;
+  margin-left: 20px;
   z-index: 5;
 }
 .hook{
   position: absolute;
   width:100%;
   height: 100%;
-  margin-left: -20px;
+  margin-left: -4%;
   margin-top:-50px;
   transform:translate(0%,-100%);
   background-image: url("../img/hook.svg");
   background-clip: content-box;
   background-position: bottom;
-  background-repeat: repeat-x;
-  background-size: contain;
+  background-repeat: no-repeat;
+  background-size:contain;
   z-index: 1;
 }
 
@@ -92,13 +93,13 @@
   background-position: bottom;
   background-repeat: no-repeat;
   background-size:contain;
-  z-index: 2;
+  z-index: 1;
 }
 
-.bjs-bottle.pull-up{
-  animation-name:pull-up;
+.bjs-bottle.bottle-pull-up{
+  animation-name:bottle-pull-up;
   animation-delay: 5s;
-  animation-duration: 5s;
+  animation-duration: 5.5s;
   animation-direction: reverse;
 }
 
@@ -137,6 +138,130 @@
     animation-timing-function:cubic-bezier(.3, .2, .15, .2);
 }
 
+
+.compose{
+  position:absolute;
+  background-image:url("../img/compose.png");
+  width: 200px;
+  height:200px;
+  margin-top: 500px;
+  z-index: 2;
+  opacity:.9;
+  background-repeat: none;
+  background-position: center;
+  background-size: contain;
+  animation-name: crawl;
+  animation-duration: 60s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-timing-function:linear;
+}
+
+
+@media screen and (min-width: 500px) and (max-width: 800px) {
+
+  .bjs-bottle.bottle-pull-up{
+    animation-duration: 5.4s;
+  }
+
+  @keyframes pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,-20%)}
+  }
+
+  @keyframes bottle-pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,0%)}
+  }
+}
+
+@media screen and (min-width: 801px) and (max-width: 1000px) {
+
+  .hook{
+    margin-left: -5%;
+  }
+
+  .bjs-bottle.bottle-pull-up{
+    animation-duration: 5.5s;
+  }
+
+  @keyframes pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,-21%)}
+  }
+
+  @keyframes bottle-pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,0%)}
+  }
+}
+
+@media screen and (min-width: 1001px) and (max-width: 1280px) {
+
+  .hook{
+    margin-left: -5%;
+  }
+
+  .bjs-bottle.bottle-pull-up{
+    animation-duration: 5.6s;
+  }
+
+  @keyframes pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,-26%)}
+  }
+
+  @keyframes bottle-pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,0%)}
+  }
+}
+
+@media screen and (min-width: 1281px) and (max-width: 1599px) {
+
+  .bjs-bottle.bottle-pull-up{
+    animation-duration: 5.55s;
+  }
+
+  @keyframes pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,-26%)}
+  }
+
+  @keyframes bottle-pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,0%)}
+  }
+}
+
+@media screen and (min-width: 1600px) and (max-width: 1920px) {
+
+  .hook{
+    margin-left: -3%;
+  }
+
+  .bjs-bottle.bottle-pull-up{
+    animation-duration: 5.6s;
+  }
+
+  @keyframes pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,-27%)}
+  }
+
+  @keyframes bottle-pull-up{
+    0%{transform:translate(0%,-100%)}
+    100%{transform:translate(0%,0%)}
+  }
+}
+
+@keyframes crawl {
+0% {transform: translateY(5%)translateX(55%)}
+30% {transform: translateY(-60%) translateX(55%)}
+50% {transform: translateY(-30%) translateX(55%)}
+100% {transform: translateY(-10%) translateX(55%)}
+}
+
 @keyframes swim {
 
   100% {transform: translateY(70px) translateX(-1400px)}
@@ -149,11 +274,6 @@
   10% {transform: translateY(-100px) translateX(800px)}
   0% {transform: translateY(-170px) translateX(1200px)}
 
-}
-
-@keyframes pull-up{
-  0%{transform:translate(0%,-100%)}
-  100%{transform:translate(0%,0%)}
 }
 
 @keyframes algae{
